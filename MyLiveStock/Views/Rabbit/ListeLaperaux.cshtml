@@ -1,0 +1,129 @@
+﻿@model List<Entity.Rabbit>
+
+
+@{
+    ViewBag.Title = "ListeLaperaux";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section styles{
+
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.bootstrap.min.css" />   
+    
+}
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Page Header
+            <small>Liste des laperaux</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Liste des laperaux</li>
+        </ol>
+    </section>
+    <div class="content">
+        <div class="box">
+            <div class="box-header">
+                @*<a href="#js-createRabbit-modal" data-toggle="modal" class="pull-right"><i class="icon fa fa-2x fa-plus-square"></i></a>*@
+                <h4 class="box-title">
+                    Liste des laperaux
+                </h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered table-hover table-striped" id="js-rabbit-listeTable">
+                    <thead>
+                        <tr>
+                            <th>Matricule</th>
+                            <th>Type</th>
+                            <th>Couleur</th>
+                            <th>Age</th>
+                            <th>Mat mère</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rabbit in Model)
+                        {
+                            MyLiveStock.Models.Age age = new MyLiveStock.Models.Age(rabbit.Date);
+                            <tr class="js-rabbit-item" data-idRabbit="@rabbit.Id">                                
+                                <td>@rabbit.Matricule</td>
+                                <td>@rabbit.Type.ToString()</td>
+                                <td>@rabbit.Color</td>
+                                <td>@age.GetAge()</td>
+                                <td>
+                                    @rabbit.IdMere                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="~/Scripts/Plugin/DataTables/media/js/jquery.dataTables.min.js"></script>    
+    <script src="~/Scripts/Plugin/DataTables/media/js/dataTables.bootstrap.js"></script>
+    
+    <script src="~/Scripts/Plugin/datepicker/bootstrap-datepicker.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#js-rabbit-listeTable').dataTable({
+                "language": {
+                    "lengthMenu": "Afficher _MENU_ lapereau par pages",
+                    "zeroRecords": "Nothing found - sorry",
+                    "info": "_PAGE_ de _PAGES_ Pages",
+                    "infoEmpty": "Pas de lapereaux dans le système",
+                    "infoFiltered": "(filtered from _MAX_ total records)",
+                    "search": "Rechercher:"
+                },
+                "colomnDefs":[ {
+                    "className": 'select-checkbox',
+                    "targets" : 0
+                }],
+                "select": {
+                    "style": 'os',
+                    "selector": 'td:first-child'
+                },
+                "lengthMenu": [ [15, 25, 50, -1], [15, 25, 50, "All"] ],
+                "paging": true,
+                "ordering": true,
+                "searching": true,
+                "info": true,
+                "select": true,                
+            });
+
+            $('#date').datepicker({
+                "autoclose" : true
+            });
+
+
+            
+
+            $(function () {
+
+                var table = $('#js-rabbit-listeTable').DataTable();
+
+                $('#js-rabbit-listeTable tbody').on('click', 'tr', function () {
+                    var idRabbit = table.row(this);
+                    var myId = idRabbit.data();
+                    console.log(myId);
+                    window.location = '/Rabbit/DetailRabbit/' + myId[0];
+                });
+                
+            });
+
+
+
+
+            
+        });
+    </script>
+}

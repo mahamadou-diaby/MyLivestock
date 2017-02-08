@@ -1,0 +1,514 @@
+﻿@model MyLiveStock.Models.RabbitViewModel
+@{
+    ViewBag.Title = "DetailRabbit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.bootstrap.min.css" type="text/css" />    
+    <link rel="stylesheet" href="~/Scripts/Plugin/datepicker/datepicker3.css" />
+    <link rel="stylesheet" href="~/Content/Css/skins/_all-skins.min.css" />
+
+    }
+
+@{ 
+    var etat = true;
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Page Header
+            <small>Liste des lapins</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Liste des lapins</li>
+        </ol>
+    </section>
+    <div class="content">
+        <div class="panel-group" id="bs-panelGroup">            
+            <div class="panel panel-default">
+                <div class="panel-heading label-primary">
+                    <h4 class="panel-title">
+                        <a data-parent="#bs-panelGroup" data-toggle="collapse" href="#bs-informationSaillie">
+                            Information de lapin
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" id="bs-informationSaillie">                    
+                    @using (Html.BeginForm("UpdateRabbit", "Rabbit", FormMethod.Post))
+                    {
+                        <div class="panel-body">
+                            <div id="infoRabbi-content">
+                                <div class="col-lg-6">
+                                    <input type="hidden" value="@Model.Productrice.Id" name="id" />
+                                    <div class="form-group">
+                                        @Html.Label("Matricule")
+                                        @Html.TextBox("matricule", Model.Productrice.Matricule, new { @class = "form-control required", readOnly = true })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Couleur")
+                                        @Html.TextBox("couleur", Model.Productrice.Color, new { @class = "form-control" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Poids")
+                                        @Html.TextBox("poids", Model.Productrice.Poids, new { @class = "form-control" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Date")
+                                        <div class="input-group">
+                                            @Html.TextBox("date", Model.Productrice.Date.ToString("dd/MM/yyyy"), new { @class = "form-control number", id = "date" })
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Sexe")
+                                        <select class="form-control" name="gender">
+                                            <option value="0">Mâle</option>
+                                            <option value="1" selected>Femelle</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Type")
+                                        <select class="form-control" name="Type">
+                                            <option value="0">Producteur</option>
+                                            <option value="1" selected>Productrice</option>
+                                            <option value="2">Lapereau</option>
+                                            <option value="3">Lapin(e) en engraissement</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-3 pull-right">
+                                            <input type="submit" class="btn btn-primary form-control" value="Soumettre" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a data-toggle="modal" href="#js-deleteRabbit-modal" aria-hidden="true" class="pull-right" data-idSaillie="@Model.Productrice.Id"><small class="label label-primary"><i class="fa fa-trash-o"></i></small></a>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading label-primary">
+                    <h4 class="panel-title">
+                        @*<a href="#js-createMisebas-modal" data-toggle="modal" class="pull-right"><i class="icon fa fa-plus-square" style="margin-bottom:5px;"></i></a>*@
+                        <a data-toggle="collapse" data-parent="#bs-panelGroup" href="#bs-informationMisebas">
+                            Information de mise bas
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" id="bs-informationMisebas">
+                    @using (Html.BeginForm("UpdateRabbitMiseBas", "Rabbit", FormMethod.Post))
+                    {                        
+                            
+                        
+                        <div class="panel-body">
+                            <div id="misebas-table-content">
+                                <table class="table table-condensed table-bordered table-hover table-responsive table-striped" id="js-misebas-listeTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Portée</th>
+                                            <th>Observation</th>
+                                            <th>Saillie</th>
+                                            <th>Matricule</th>
+                                            <th>Morts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                        
+                                        @foreach (var misebs in Model.Productrice.MiseBas)
+                                        {
+                                            <tr @(etat = !etat) class="@(etat == true ? "warning" : "info")" data-idRabbit="@misebs.Date">
+                                                <td>@misebs.Date.Date.ToString("dd/MM/yyyy")</td>
+                                                <td>@misebs.Portee</td>
+                                                <td>@misebs.Observation</td>
+                                                <td>@misebs.IdSaillie</td>
+                                                <td>@misebs.MatriculeMisebas</td>
+                                                <td>
+                                                    @if(misebs.Deaths != null)
+                                                    {
+                                                        <span>@misebs.Deaths.Count()</span>
+                                                    }
+                                                    @if (!misebs.IsSevrate)
+                                                    {
+                                                        <a data-toggle="modal" aria-hidden="true" href="#js-sevrate-modal" title="Sevrage" class="pull-right js-sevrate" style="padding-left: 5px;" data-matMisebas="@misebs.MatriculeMisebas"><small class="label label-info"><i class="fa fa-clock-o"></i></small></a>
+                                                        <a data-toggle="modal" style="padding-left: 20px;" title="Signaler un mort" href="#js-mort-modal" aria-hidden="true" class="pull-right death-link" data-matMisebas="@misebs.MatriculeMisebas"><small class="label label-danger"><i class="fa fa-trash-o"></i></small></a>
+                                                    }
+                                                </td>
+                                            </tr>                                           
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading label-primary">
+                    <h4 class="panel-title">
+                        <a href="#js-createSaillie-modal" title="Ajouter une nouvelle saillie" data-toggle="modal" id="js-addSaillie-modal" class="pull-right"><i class="icon fa fa-plus-square" style="margin-bottom:5px;"></i></a>
+                        <a data-toggle="collapse" data-parent="#bs-panelGroup" href="#bs-informationLapin">
+                            Information de saillie
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" id="bs-informationLapin">
+                    <div class="panel-body">
+                        <div id="saillie-table-content">
+                            <table class="table table-bordered table-hover table-responsive table-striped" id="js-saillie-listeTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Observation</th>
+                                        <th>Next mise bas</th>
+                                        <th>Mâle</th>
+                                        <th>Id saillie</th>
+                                        <th>Status</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>                                    
+                                    @foreach (var saillie in Model.Productrice.Saillie)
+                                    {
+                                        <tr @(etat = !etat) class="@(etat == true ? "warning" : "info")" data-idRabbit="">
+                                            <td>@saillie.Date.Date.ToString("dd/MM/yyyy")</td>
+                                            <td>@saillie.Observation</td>
+                                            <td>@saillie.NextMiseBas.ToString("dd/MM/yyyy")</td>
+                                            <td>@saillie.IdMaleSaillant</td>
+                                            <td>@saillie.MatriculeSaillie</td>
+                                            <td style="align-content:flex-end">
+                                                @if (saillie.status == Entity.StatuSaillie.EnCour)
+                                                {
+                                                    <small class="label label-info">En cours</small>
+                                                    <a data-toggle="modal" title="Noter la nouvelle mise bas" href="#js-createMisebas-modal" aria-hidden="true" class="saillie-item" data-idSaillie="@saillie.Id"><small class="label label-warning"><i class="fa fa-clock-o"></i></small></a>
+                                                    <a data-toggle="modal" title="Supprimer la saillie" href="#js-deleteSaillie-modal" aria-hidden="true" class="deleteSaillieClick-item pull-right" data-idSaillie="@saillie.Id"><small class="label label-danger"><i class="fa fa-trash-o"></i></small></a>
+
+                                                }
+
+                                                @if (saillie.status == Entity.StatuSaillie.Echoué)
+                                                {
+                                                    <small class="label label-danger">Echoué</small>
+                                                    <a data-toggle="modal" title="Supprimer la saillie" href="#js-deleteSaillie-modal" aria-hidden="true" class="deleteSaillieClick-item pull-right" data-idSaillie="@saillie.Id"><small class="label label-danger"><i class="fa fa-trash-o"></i></small></a>
+
+
+                                                }
+
+                                                @if(saillie.status == Entity.StatuSaillie.Reussit)
+                                                {
+                                                    <small class="label label-success">Succès</small>
+                                                    <a data-toggle="modal" title="Supprimer la saillie" href="#js-deleteSaillie-modal" aria-hidden="true" class="deleteSaillieClick-item pull-right" data-idSaillie="@saillie.Id"><small class="label label-danger"><i class="fa fa-trash-o"></i></small></a>
+
+                                                }
+                                            </td>                                           
+                                        </tr>                                       
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    @*@using (Html.BeginForm("UpdateRabbitMiseBas", "Rabbit", FormMethod.Post))
+                    {
+                        
+                    }*@
+
+                </div>
+            </div>
+                      
+        </div>
+
+    </div>
+</div>
+<div id="misebas-modal">
+    <div id="js-createMisebas-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("AddMiseBas", "Rabbit", FormMethod.Post, new { id = "CreateRabbitForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Ajouter une mise bas</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="@Model.Productrice.Id" name="idRabbit"/>
+                        <input type="hidden" value="" name="idSaillie" id="idInput" />
+                        <div class="form-group">
+                            @Html.Label("Date")
+                            @Html.TextBox("date", "", new { @class = "form-control required", id = "dateMisebas" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Portée")
+                            @Html.TextBox("portee", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Observation")
+                            @Html.TextArea("observation", null, new { @class = "form-control number", id = "date" })
+                        </div>                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="submit btn btn-primary">Soumettre</button>
+
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+<div id="example-modal">
+    <div id="js-createSaillie-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("AddSaillie", "Rabbit", FormMethod.Post, new { id = "CreateSaillieForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Ajouter une saillie</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="@Model.Productrice.Id" name="id" />
+                        <div class="form-group">
+                            @Html.Label("Date")
+                            @Html.TextBox("date", "", new { @class = "form-control required", id = "dateSaillie" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Observation")
+                            @Html.TextArea("observation", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Mâle")
+                            @Html.DropDownList("idMale", (SelectList)ViewBag.listeMale, new { @class = "form-control" })
+                        </div>                                                                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="submit btn btn-primary">Soumettre</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+<div id="example-modal">
+    <div id="js-deleteSaillie-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("DeleteSaillie", "Rabbit", FormMethod.Post, new { id = "CreateSaillieForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Supprimer une saillie</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="@Model.Productrice.Id" name="idRabbit" />
+                        <input type="hidden" value="" name="idDeleteSaillie" id="idDeleteSaillie" />
+                        Êtes-vous sûr de vouloir supprimer cette saillie ?                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                        <button type="submit" class="submit btn btn-primary">Confirmer</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+<div id="example-modal">
+    <div id="js-deleteRabbit-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("DeleteRabbit", "Rabbit", FormMethod.Post, new { id = "CreateSaillieForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Supprimer une saillie</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="@Model.Productrice.Id" name="idRabbit" />                        
+                        Êtes-vous sûr de vouloir supprimer ces @Model.Productrice.Type ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                        <button type="submit" class="submit btn btn-primary">Confirmer</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+<div id="example-modal">
+    <div id="js-sevrate-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("Sevrate", "Rabbit", FormMethod.Post, new { id = "PutSevrateForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Supprimer une saillie</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="@Model.Productrice.Id" name="idRabbit" />
+                        <input type="hidden" value="" id="matItem" name="MatMisebas" />
+                        Êtes-vous sûr de vouloir sevrer ce poole ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                        <button type="submit" class="submit btn btn-primary">Confirmer</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+<div id="example-modal">
+    <div id="js-mort-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("PutDeath", "Rabbit", FormMethod.Post, new { id = "CreateSaillieForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Signaler un mort</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="@Model.Productrice.Id" name="idRabbit" />
+                        <input type="hidden" value="" name="MatMisebas" id="js-MatMisebas"/>
+                        <div class="form-group">
+                            @Html.Label("Date")
+                            @Html.TextBox("date", "", new { @class = "form-control required", id = "dateDeath" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Nombre")
+                            @Html.TextBox("nombre", "", new { @class = "form-control required"})
+                        </div>                       
+                        <div class="form-group">
+                            @Html.Label("Cause")
+                            @Html.TextArea("cause", "", new { @class = "form-control required"})
+                        </div>                      
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                        <button type="submit" class="submit btn btn-primary">Confirmer</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+@*<div class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h4>	<i class="icon fa fa-check"></i> Alert!</h4>
+    Success alert preview. This alert is dismissable.
+</div>*@
+
+@section scripts{
+    
+    <script src="~/Scripts/Plugin/DataTables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/Plugin/DataTables/media/js/dataTables.bootstrap.js"></script>          
+    <script src="~/Scripts/Plugin/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/Plugin/datepicker/locales/bootstrap-datepicker.fr.js" charset="utf-8"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>    
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(function(){
+
+                $('#dateMisebas').datepicker({
+                    "autoclose": true,
+                    "language": 'fr',
+                    "todayHighlight": true,
+                    "orientation": "top right"
+                });
+
+                $('#dateSaillie').datepicker({
+                    "autoclose": true,
+                    "language": 'fr',
+                    "todayHighlight": true,
+                    "orientation": "top right"
+                });
+
+                $('#dateDeath').datepicker({
+                    "autoclose": true,
+                    "language": 'fr',
+                    "todayHighlight": true,
+                    "orientation": "top right"
+                });
+
+                $('#date').datepicker({
+                    "autoclose": true,
+                    "language": 'fr',
+                    "todayHighlight": true,
+                    "orientation": "top right"
+                });
+            });           
+
+            $('#js-misebas-listeTable').dataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+
+            });            
+
+            $('#js-saillie-listeTable').dataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+
+            });
+
+            $(function () {
+                $('.saillie-item').click(function () {
+                    var idSaillie = $(this).data('idsaillie');
+                    $('#idInput').val(idSaillie);                    
+                });
+            });
+
+            $(function () {
+                $('.js-sevrate').click(function () {
+                    var mat = $(this).data('matmisebas');
+                    $('#matItem').val(mat);
+                });
+            });
+
+            $(function () {
+                $('.deleteSaillieClick-item').click(function () {
+                    var idSaillie = $(this).data('idsaillie');
+                    $('#idDeleteSaillie').val(idSaillie);
+                    
+                });
+            });
+
+            $(function () {
+
+                $('.death-link').on('click', function () {
+                    var matMisebas = $(this).data('matmisebas'), idRabbit = $(this).data('idrabbit')
+                    $('#js-MatMisebas').val(matMisebas);
+                    
+                    });                    
+                });
+            });        
+        
+    </script>
+    }

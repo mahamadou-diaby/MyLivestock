@@ -1,0 +1,7 @@
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.DataContrats\bin\Debug\MyLiveStock.DataContrats.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.DataContrats\bin\Debug\MyLiveStock.DataContrats.pdb
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.DataContrats\bin\Debug\Entity.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.DataContrats\bin\Debug\Entity.pdb
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.DataContrats\obj\Debug\MyLiveStock.DataContrats.csprojResolveAssemblyReference.cache
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.DataContrats\obj\Debug\MyLiveStock.DataContrats.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.DataContrats\obj\Debug\MyLiveStock.DataContrats.pdb

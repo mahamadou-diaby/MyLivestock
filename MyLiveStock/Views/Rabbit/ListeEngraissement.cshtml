@@ -1,0 +1,282 @@
+﻿@model List<Entity.Rabbit>
+
+@{
+    ViewBag.Title = "ListeEngraissement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.bootstrap.min.css" type="text/css" />
+    @*<link rel="stylesheet" href="~/Content/Css/Customs/striped-color.css" />*@
+    @*<link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.uikit.min.css" type="text/css" />*@
+    @*<link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.foundation.min.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.jqueryui.min.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/jquery.dataTables.min.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/jquery.dataTables_themeroller.css" type="text/css"/>*@
+    
+
+}
+
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Page Header
+            <small>Liste des lapins en engraissement</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Liste des lapins</li>
+        </ol>
+    </section>
+    <div class="content">
+        <div class="box">
+            <div class="box-header">
+                @*<a href="#js-createRabbit-modal" data-toggle="modal" class="pull-right"><i class="icon fa fa-2x fa-plus-square"></i></a>*@
+                <h4 class="box-title">
+                    Liste des lapins
+                </h4>
+            </div>
+            <div class="box-body">
+                <table id="js-engraissement-listeTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th>
+                            <th>Matricule</th>
+                            <th>Sexe</th>
+                            <th>Couleur</th>
+                            <th>Age.</th>
+                            <th>Picture</th>
+                            <th>Id Mère</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rabbit in Model)
+                        {
+                            MyLiveStock.Models.Age age = new MyLiveStock.Models.Age(rabbit.Date);
+                            <tr class="js-rabbit-item" data-idRabbit="@rabbit.Id">
+                                <td></td>
+                                <td>@rabbit.Matricule</td>
+                                <td>@rabbit.Gender</td>
+                                <td>@rabbit.Color</td>
+                                <td>@age.GetAge()</td>
+                                <td><img src="~/Images/@rabbit.PictureName" style="width :60px; height:40px; padding-bottom:0px; padding-top:0px;" /></td>
+                                <td>
+                                    @rabbit.IdMere
+                                </td>
+                            </tr>
+                        }
+                    </tbody>                    
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="example-modal">
+    <div id="js-deleteRabbit-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("DeleteRabbit", "Rabbit", FormMethod.Post, new { id = "DeleteRabbitForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Supprimer une saillie</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="" name="idRabbit" id="rabbitId" />
+                        Êtes-vous sûr de vouloir supprimer ce lapin ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                        <button type="submit" class="submit btn btn-primary">Confirmer</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+
+
+@section scripts{
+
+    <script src="~/Scripts/Plugin/DataTables/media/js/jquery.dataTables.min.js"></script>    
+    <script src="~/Scripts/Plugin/DataTables/media/js/dataTables.bootstrap.js"></script>
+    @*<script src="~/Scripts/Plugin/DataTables/media/js/dataTables.uikit.js"></script>*@
+
+    <script src="~/Scripts/Plugin/datepicker/bootstrap-datepicker.js"></script>
+
+
+    <script type="text/javascript">
+        //$(document).ready(function () {
+        //    //$(function () {
+
+        //    //    $('#js-engraissement-listeTable').dataTable({
+        //    //        "language": {
+        //    //            "lengthMenu": "Afficher _MENU_ lapins par pages",
+        //    //            "zeroRecords": "Nothing found - sorry",
+        //    //            "info": "_PAGE_ de _PAGES_ Pages",
+        //    //            "infoEmpty": "Pas de lapins en engraissement dans le système",
+        //    //            "infoFiltered": "(filtered from _MAX_ total records)",
+        //    //            "search": "Rechercher:"
+        //    //        },
+        //    //        "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]],
+        //    //        "paging": true,
+        //    //        "ordering": true,
+        //    //        "searching": true,
+        //    //        "info": true,
+        //    //        "select": true,
+        //    //        'columnDefs': [
+        //    //             {
+        //    //                 'targets': 0,
+        //    //                 'checkboxes': {
+        //    //                     'selectRow': true
+        //    //                 }
+        //    //             }
+        //    //        ],
+        //    //        'select': {
+        //    //            'style': 'multi'
+        //    //        },
+        //    //        'order': [[1, 'asc']]
+        //    //    });
+        //    //});
+
+        
+
+        //    $(function () {
+
+        //        $('.deleteRabbitClick-item').on('click', function () {
+
+        //            var idrabbit = $(this).data('idrabbit');
+        //            $('#rabbitId').val(idrabbit);
+        //        });
+
+        //    });            
+
+
+        //    //$(function () {
+
+        //    //    var table = $('#js-engraissement-listeTable').DataTable();
+
+        //    //    $('#js-engraissement-listeTable tbody').on('click', 'tr', function () {
+        //    //        var idRabbit = table.row(this);
+        //    //        var myId = idRabbit.data();
+        //    //        var od = $(this).attr('data-idRabbit');
+        //    //        console.log(myId);
+        //    //        window.location = '/Rabbit/DetailRabbit/' + myId[0];
+        //    //    });
+
+        //    //});
+
+
+
+
+
+        //});
+
+
+
+
+        $(document).ready(function () {
+
+                $('#date').datepicker({
+                    "autoclose" : true
+                });
+
+                var table = $('#js-engraissement-listeTable').DataTable({
+                //'ajax': '/Rabbit/MyJsonData',
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" name="id[]" value="'
+                           + $('<div/>').text(data).html() + '">';
+                    }
+                }],
+                'order': [1, 'asc']
+            });
+
+            // Handle click on "Select all" control
+            $('#example-select-all').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+            // Handle click on checkbox to set state of "Select all" control
+            $('#js-engraissement-listeTable tbody').on('change', 'input[type="checkbox"]', function () {
+                // If checkbox is not checked
+                if (!this.checked) {
+                    var el = $('#example-select-all').get(0);
+                    // If "Select all" control is checked and has 'indeterminate' property
+                    if (el && el.checked && ('indeterminate' in el)) {
+                        // Set visual state of "Select all" control 
+                        // as 'indeterminate'
+                        el.indeterminate = true;
+                    }
+                }
+            });
+
+            $('#frm-example').on('submit', function (e) {
+                var form = this;
+
+                // Iterate over all checkboxes in the table
+                table.$('input[type="checkbox"]').each(function () {
+                    // If checkbox doesn't exist in DOM
+                    if (!$.contains(document, this)) {
+                        // If checkbox is checked
+                        if (this.checked) {
+                            // Create a hidden element 
+                            $(form).append(
+                               $('<input>')
+                                  .attr('type', 'hidden')
+                                  .attr('name', this.name)
+                                  .val(this.value)
+                            );
+                        }
+                    }
+                });
+
+                // FOR TESTING ONLY
+
+                // Output form data to a console
+                $('#example-console').text($(form).serialize());
+                console.log("Form submission", $(form).serialize());
+
+                // Prevent actual form submission
+                e.preventDefault();
+            });
+
+            var table = $('#js-engraissement-listeTable').DataTable();
+            var rows = table.rows().nodes();
+            var counter = 0;
+            for (var i = 0; i < rows.length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    console.log(rows[i]);
+                    var j = $(rows[i]);
+                    console.log(j)                    
+                    var t = j.attr('class');
+                    j.attr('class', 'info ' + t);
+                }
+                else {
+                    console.log(rows[i]);
+                    var r = $(rows[i]).attr('class');
+                    $(rows[i]).attr('class', 'warning ' + r);
+                    console.log(this);
+                }
+                
+            }            
+
+            $(function () {
+                
+            });
+        });
+    </script>
+}

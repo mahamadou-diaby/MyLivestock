@@ -1,0 +1,139 @@
+﻿@model List<Entity.Transactions.Transaction>
+
+@{
+    ViewBag.Title = "Recette";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.jqueryui.min.css" />
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/jquery.dataTables.min.css" />
+    
+    }
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Page Header
+            <small>Liste des lapins</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Liste des lapins</li>
+        </ol>
+    </section>
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <p>Montant à percevoir</p>
+                        <h3 id="coming-amount">@(ViewBag.SelRabbit * 4000)</h3>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-cash"></i>
+                    </div>
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <p>Montant reçu</p>
+                        <h3>0</h3>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-cash"></i>
+                    </div>
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">                        
+                        <p>Bénéfice</p>
+                        <h3>0</h3>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-cash"></i>
+                    </div>                    
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <p>Caisse</p>
+                        <h3>0</h3>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-cash"></i>
+                    </div>
+                </div>
+            </div><!-- ./col -->
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Liste des recettes
+                </h4>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped table-responsive" id="js-income-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var expense in Model)
+                        {
+                            <tr>
+                                <td>@expense.Date</td>
+                                <td>@expense.Description</td>
+                                <td>@expense.Amount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="~/Scripts/Plugin/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/Plugin/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+    <script src="~/Scripts/Plugin/DataTables/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(function () {
+
+                $('#js-income-table').dataTable({
+                    paging: true,
+                    sorting: true,
+                    searching: true,
+                    info: true
+                });
+            });
+
+            $(function () {
+                
+                var amount = $('#coming-amount').text();
+                var amountFormat = parseInt(amount, 10);
+                $('#coming-amount').text(amountFormat.toLocaleString());
+                
+            });
+        });
+    </script>
+    
+    }

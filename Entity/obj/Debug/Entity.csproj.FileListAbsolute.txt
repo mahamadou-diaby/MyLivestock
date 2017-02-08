@@ -1,0 +1,10 @@
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\bin\Debug\Entity.dll.config
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\bin\Debug\Entity.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\bin\Debug\Entity.pdb
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\bin\Debug\EntityFramework.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\bin\Debug\EntityFramework.xml
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\obj\Debug\Entity.csprojResolveAssemblyReference.cache
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\obj\Debug\Entity.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\Entity\obj\Debug\Entity.pdb

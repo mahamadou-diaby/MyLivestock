@@ -1,0 +1,13 @@
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\MyLiveStock.Service.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\MyLiveStock.Service.pdb
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\Entity.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\MyLiveStock.DataAccess.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\MyLiveStock.DataContrats.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\EntityFramework.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\Entity.pdb
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\MyLiveStock.DataAccess.pdb
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\MyLiveStock.DataContrats.pdb
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\bin\Debug\EntityFramework.xml
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\obj\Debug\MyLiveStock.Service.csprojResolveAssemblyReference.cache
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\obj\Debug\MyLiveStock.Service.dll
+C:\Users\Diaby\Source\Repos\software\MyLiveStockSolution\MyLiveStock.Service\obj\Debug\MyLiveStock.Service.pdb

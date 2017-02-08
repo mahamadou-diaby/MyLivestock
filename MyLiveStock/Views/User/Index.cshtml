@@ -1,0 +1,137 @@
+﻿@model List<Entity.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    
+    
+    }
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Page Header
+            <small>Liste des lapins</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Liste des lapins</li>
+        </ol>
+    </section>
+    <div class="content">
+        <div class="box">
+            <div class="box-header">
+                <a href="#js-createUser-modal" data-toggle="modal" class="pull-right"><i class="icon fa fa-2x fa-plus-square"></i></a>
+                <h4 class="box-title">
+                    Liste des utilisateurs
+                </h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Nom d'utilisateur</th>
+                            <th>Rôles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var u in Model)
+                        {
+                            <tr>
+                                <td>@u.Lastname</td>
+                                <td>@u.Firstname</td>
+                                <td>@u.Username</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+    </div>
+
+    <div id="example-modal">
+        <div id="js-createUser-modal" class="modal fade">
+            <div class="modal-dialog">
+                @using (Html.BeginForm("CreateUser", "User", FormMethod.Post, new { id = "CreateUserForm", enctype = "multipart/form-data" }))
+                   {
+                        <div class="modal-content">
+                            <div class="modal-header label-info">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Ajouter un lapin</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        @Html.LabelFor(m => m.FirstOrDefault().Lastname, new { @class = "col-lg-2" })
+                                        <div class="col-lg-10">
+                                            @Html.TextBoxFor(m => m.FirstOrDefault().Lastname, new { @class = "form-control", @Value = "" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        @Html.LabelFor(m => m.FirstOrDefault().Firstname, new { @class = "col-lg-2" })
+                                        <div class="col-lg-10">
+                                            @Html.TextBoxFor(m => m.FirstOrDefault().Firstname, new { @class = "form-control", @Value = "" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        @Html.LabelFor(m => m.FirstOrDefault().Username, new { @class = "col-lg-2" })
+                                        <div class="col-lg-10">
+                                            @Html.TextBoxFor(m => m.FirstOrDefault().Username, new { @class = "form-control", @Value = "" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        @Html.LabelFor(m => m.FirstOrDefault().Password, new { @class = "col-lg-2" })
+                                        <div class="col-lg-10">
+                                            @Html.TextBoxFor(m => m.FirstOrDefault().Password, new { @class = "form-control", @Value = "", type = "password" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        @Html.Label("Confirmer", new { @class = "col-lg-2" })
+                                        <div class="col-lg-10">
+                                            @Html.TextBox("confirmer", null, new { @class = "form-control", @Value = "", type = "password" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        @Html.LabelFor(m => m.FirstOrDefault().Role, new { @class = "col-lg-2" })
+                                        <div class="col-lg-10">
+                                            @Html.EnumDropDownListFor(m => m.FirstOrDefault().Role, "Choisissez une option", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="submit btn btn-primary">Soumettre</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    }
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div><!-- /.example-modal -->
+</div>
+
+
+
+
+
+@section scripts{
+    
+    
+    }

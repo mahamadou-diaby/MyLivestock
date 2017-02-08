@@ -1,0 +1,120 @@
+﻿@model MyLiveStock.Models.NavigationModel
+
+<!-- Main Header -->
+<header class="main-header">
+
+    <!-- Logo -->
+    <a href="#" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>L</b>ST</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>LiveStock</b></span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- User Account Menu -->
+                <li class="dropdown user user-menu">
+                    <!-- Menu Toggle Button -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <!-- The user image in the navbar-->
+                        <img src="~/Content/img/avatar.png" class="user-image" alt="User Image">
+                        <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                        <span class="hidden-xs">Mouhamad El-Bachir</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- The user image in the menu -->
+                        <li class="user-header">
+                            <img src="~/Content/img/avatar.png" class="img-circle" alt="User Image">
+                            <p>
+                                Mouhamad El-Bachir - Web Developer
+                                <small>Membre depuis Avr. 2014</small>
+                            </p>
+                        </li>
+                        <!-- Menu Body -->
+                        <li class="user-body">
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Followers</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Sales</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Friends</a>
+                            </div>
+                        </li>
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                            </div>
+                            <div class="pull-right">
+                                <a href="/Account/Logout" class="btn btn-primary btn-flat">Se déconnecter</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <!-- Control Sidebar Toggle Button -->
+                <li>
+                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+        <!-- search form (Optional) -->
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+        <!-- /.search form -->
+        <!-- Sidebar Menu -->
+        <ul class="sidebar-menu">
+            <li class="header">HEADER</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li class="@Model.GetCssClassIfHomeSelected()"><a href="/"><i class="fa fa-home"></i> <span>Accueil</span></a></li>            
+            <li class="treeview @Model.GetGroupCssClassIfSelected("/Rabbit")">
+                <a href="#"><i class="fa fa-crop"></i> <span>Liste des Lapins</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li class="@Model.GetCssClassIfSelected("/Rabbit")"><a href="/Rabbit"><i class="fa fa-circle-o"></i> Producteurs</a></li>
+                    <li class="@Model.GetCssClassIfSelected("/Rabbit/ListeLaperaux")"><a href="/Rabbit/ListeLaperaux"><i class="fa fa-circle-o"></i>Laperaux</a></li>
+                    <li class="@Model.GetCssClassIfSelected("/Rabbit/ListeEngraissement")"><a href="/Rabbit/ListeEngraissement"><i class="fa fa-circle-o"></i>En engraissements</a></li>
+                </ul>
+            </li>            
+            <li><a href="/Programme/Index"><i class="fa fa-calendar-o"></i> <span>Programme</span></a></li>
+            <li class="treeview @Model.GetGroupCssClassIfSelected("/Comptabilite")">
+                <a href="#"><i class="fa fa-bank"></i> <span>Comptabilité</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li class="@Model.GetCssClassIfSelected("/Comptabilite/Recette")"><a href="/Comptabilite/Recette"><i class="fa fa-circle-o"></i>Recette</a></li>
+                    <li class="@Model.GetCssClassIfSelected("/Comptabilite/Depenses")"><a href="/Comptabilite/Depenses"><i class="fa fa-circle-o"></i>Dépense</a></li>                    
+                </ul>
+            </li>
+            <li class="treeview @Model.GetGroupCssClassIfSelected("/Administration")">
+                <a href="#"><i class="fa fa-gears"></i> <span>Administration</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li class="@Model.GetCssClassIfSelected("/Administration/Parametre")"><a href="#"><i class="fa fa-circle-o"></i>Paramètre</a></li>
+                    <li class="@Model.GetCssClassIfSelected("/User")"><a href="/User/Index"><i class="fa fa-circle-o"></i>Comptes</a></li>
+                </ul>
+            </li>
+        </ul><!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,98 @@
+﻿@model Entity.Rabbit
+@{
+    ViewBag.Title = "DetailRabbit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Page Header
+            <small>Liste des lapins</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Liste des lapins</li>
+        </ol>
+    </section>
+    <div class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Detail de lapin
+                </h4>
+            </div>
+            @using (Html.BeginForm("UpdateRabbit", "Rabbit", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="panel-body">
+                    <div id="infoRabbi-content">
+                        <div class="col-lg-6">
+                            <input type="hidden" value="@Model.Id" name="id" />
+                            <div class="form-group">
+                                @Html.Label("Matricule")
+                                @Html.TextBox("matricule", Model.Matricule, new { @class = "form-control required", @readonly = "true"})
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Couleur")
+                                @Html.TextBox("couleur", Model.Color, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Poids")
+                                @Html.TextBox("poids", Model.Poids, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Date")
+                                @Html.TextBox("date", Model.Date.ToString("dd/MM/yyyy"), new { @class = "form-control number", id = "date" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Sexe")
+                                <select class="form-control" name="gender">
+                                    @if (Model.Gender == Entity.RabbitGender.Femelle)
+                                    {
+                                        <option value="0">Mâle</option>
+                                        <option value="1" selected>Femelle</option>
+                                    }
+
+                                    @if (Model.Gender == Entity.RabbitGender.Mâle)
+                                    {
+                                        <option value="0" selected>Mâle</option>
+                                        <option value="1">Femelle</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Type")
+                                <select class="form-control" name="Type">
+                                    <option value="0">Producteur</option>
+                                    <option value="1">Productrice</option>
+                                    @if (Model.Type == Entity.RabbitType.Laperau)
+                                    {
+                                        <option value="2" selected>Lapereau</option>
+                                        <option value="3">Lapin(e) en engraissement</option>
+                                    }
+                                    @if (Model.Type == Entity.RabbitType.Engraissement)
+                                    {
+                                        <option value="2">Lapereau</option>
+                                        <option value="3" selected>Lapin(e) en engraissement</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="xampleInputFile">Choisissez une image</label>
+                                <input type="file" id="xampleInputFile" name="file" class="cke_required" accept="image/*">                                
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-3 pull-right">
+                                    <input type="submit" class="btn btn-primary form-control" value="Soumettre" />
+                                </div>
+                            </div>
+                        </div>                       
+
+                    </div>
+                </div>
+            }            
+        </div>
+    </div>
+</div>
+

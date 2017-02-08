@@ -1,0 +1,205 @@
+﻿@model MyLiveStock.Models.IndexViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Scripts/Plugin/datepicker/datepicker3.css" />
+
+
+        
+    }
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Page Header
+            <small>Liste des lapins</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Liste des lapins</li>
+        </ol>
+    </section>
+    <div class="content">
+        <div class="box">
+            <div class="box-header">
+                <a href="#js-createRabbit-modal" data-toggle="modal" class="pull-right"><i class="icon fa fa-2x fa-plus-square"></i></a>                
+                <h4 class="box-title">                                        
+                    Liste des Productrice
+                </h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered table-hover table-responsive table-striped" id="js-rabbit-listeTable">
+                    <thead>
+                        <tr>
+                            <th>Matricule</th>
+                            <th>Type</th>
+                            <th>Couleur</th>
+                            <th>Age</th>
+                            <th>Picture</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rabbit in Model.Productrice)
+                        {
+                            Model.Age = new MyLiveStock.Models.Age(rabbit.Date);
+                            <tr class="js-rabbit-item" data-idRabbit="@rabbit.Id" data-Type="@rabbit.Type.ToString()">
+                                <td>@rabbit.Matricule</td>
+                                <td>@rabbit.Type.ToString()</td>
+                                <td>@rabbit.Color</td>
+                                <td>@(Model.Age.GetAge())</td>
+                                <td><img src="~/Images/@rabbit.PictureName" style="width :60px; height:40px; padding-bottom:0px; padding-top:0px;" /></td>
+                            </tr>
+                        }
+                        @foreach (var rabbit in Model.Producteur)
+                        {
+                            Model.Age = new MyLiveStock.Models.Age(rabbit.Date);
+                            <tr class="js-rabbit-item" data-idRabbit="@rabbit.Id" data-type="@rabbit.Type.ToString()">
+                                <td>@rabbit.Matricule</td>
+                                <td>@rabbit.Type.ToString()</td>
+                                <td>@rabbit.Color</td>
+                                <td>@(Model.Age.GetAge())</td>
+                                <td><img src="~/Images/@rabbit.PictureName" style="width :60px; height:40px; padding-bottom:0px; padding-top:0px;" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="example-modal">
+    <div id="js-createRabbit-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("CreateRabbit", "Rabbit", FormMethod.Post, new { id = "CreateRabbitForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Ajouter un lapin</h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <div class="form-group">
+                            @Html.Label("Matricule")
+                            @Html.TextBox("matricule", null, new { @class = "form-control required" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Couleur")
+                            @Html.TextBox("couleur", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Poids")
+                            @Html.TextBox("poids", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Date")
+                            @Html.TextBox("date", null, new { @class = "form-control number", id = "date" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Sexe")
+                            <select class="form-control" name="gender">
+                                <option value="0">Mâle</option>
+                                <option value="1">Femelle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Type")
+                            <select class="form-control" name="Type">
+                                <option value="0">Producteur</option>
+                                <option value="1">Productrice</option>
+                                <option value="2">Lapereau</option>
+                                <option value="3">Lapin(e) en engraissement</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="xampleInputFile">Choisissez une image</label>
+                            <input type="file" id="xampleInputFile" name="file" class="cke_required" accept="image/*">
+                            <p class="help-block">Example block-level help text here.</p>
+                        </div>
+                        <div>
+                            <strong>Note:</strong> Le<strong> Matricule</strong> est facultatif et peut ne pas être spécifié.
+                        </div>                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="submit btn btn-primary">Soumettre</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+<div class="footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+        Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; @DateTime.Now.Date <a href="#">Diaby</a>.</strong> All rights reserved.
+</div>
+
+@section scripts{    
+    
+    <script src="~/Scripts/Plugin/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/Plugin/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/Plugin/datepicker/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $(function () {
+
+                $('#js-rabbit-listeTable').dataTable({
+                    "paging": true,
+                    "ordering": true,
+                    "searching": true,
+                    "info": false,
+                    select: true
+                });
+            });
+
+            $('#date').datepicker({
+                "autoclose" : true
+            });
+
+            //$('.js-rabbit-item').click(function () {
+
+            //    var idRabbit = $(this).data('idrabbit');
+            //    window.location = '/Rabbit/DetailProductrice/' + idRabbit;
+            //});
+
+
+            $(function () {
+
+                var table = $('#js-rabbit-listeTable').DataTable();
+                
+
+                $('#js-rabbit-listeTable tbody').on('click', 'tr', function () {
+                    var idRabbit = table.row(this);
+                    var myMatricule = idRabbit.data();
+                    var myId = $(this).attr('data-idRabbit');
+                    var myType = $(this).attr('data-Type');
+                    if (myType == 'Productrice')
+                    {
+                        console.log(myId);
+                        window.location = '/Rabbit/DetailProductrice/' + myId;
+                    }
+                    if (myType == 'Producteur') {
+                        console.log(myId);
+                        window.location = '/Rabbit/DetailRabbit/' + myMatricule[0];
+                    }
+                    
+                });
+
+            });
+
+        });
+    </script>
+    }

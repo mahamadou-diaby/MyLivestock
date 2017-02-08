@@ -1,0 +1,4 @@
+﻿.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #5b9791; /*Choose your own color here*/
+ }

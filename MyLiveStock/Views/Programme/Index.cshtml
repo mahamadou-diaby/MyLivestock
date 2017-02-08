@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    
+    <link rel="stylesheet" href="~/Scripts/Plugin/fullcalendar/fullcalendar.min.css" />
+    <link rel="stylesheet" href="~/Scripts/Plugin/fullcalendar/fullcalendar.print.css"  media="print"/>
+
+    
+    }
+<div class="content-wrapper">
+
+    <div class="content">
+        <section class="content-header">
+            <h1>
+                Page Header
+                <small>Programe</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Liste des lapins</li>
+            </ol>
+        </section>
+        <div class="content">
+            <div class="row">
+                @*<div class="col-lg-3">
+
+            </div>*@
+                <div class="col-lg-12">
+                    <div class="box box-primary">
+                        <div class="box-body no-padding">
+                            <!-- THE CALENDAR -->
+                            <div id="calendar"></div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /. box -->
+                </div>
+            </div>    
+        </div>
+            
+    </div>
+</div>
+
+
+@section scripts{
+    
+    <script src="~/Scripts/Plugin/slimScroll/jquery.slimscroll.min.js"></script>
+    @*<script src="~/Scripts/Plugin/datepicker/bootstrap-datepicker.js"></script>*@
+    <script src="~/Scripts/Plugin/fastclick/fastclick.min.js"></script>
+    <script src="~/Scripts/Calendar_file_donwload.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>*@
+    <script src="~/Scripts/Plugin/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/Scripts/Plugin/fullcalendar/full_calendar_language/sample_french.js"></script>
+    @*<script src="~/Scripts/Plugin/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>*@
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $(function () {
+
+                var EventData;
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "/Programme/AllEvent",
+                    dataType: 'json',
+                    success: function (result) {
+                        EventData = result;
+                        var date = new Date();
+                        var d = date.getDate(),
+                                m = date.getMonth(),
+                                y = date.getFullYear();
+                        $('#calendar').fullCalendar({
+                            header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,agendaWeek,agendaDay'
+                            },
+                            buttonText: {
+                                today: 'today',
+                                month: 'mois',
+                                week: 'semaine',
+                                day: 'jour'
+                            },
+                            //Random default events
+                            events: result,
+                            eventAfterRender: function(event, element, view) {
+                                $(element).css('height','25px');
+                            },
+                            editable: true,
+                            droppable: true, // this allows things to be dropped onto the calendar !!!
+                            drop: function (date, allDay) { // this function is called when something is dropped
+
+                                // retrieve the dropped element's stored Event Object
+                                var originalEventObject = $(this).data('eventObject');
+
+                                // we need to copy it, so that multiple events don't have a reference to the same object
+                                var copiedEventObject = $.extend({}, originalEventObject);
+
+                                // assign it the date that was reported
+                                copiedEventObject.start = date;
+                                copiedEventObject.allDay = allDay;
+                                copiedEventObject.backgroundColor = $(this).css("background-color");
+                                copiedEventObject.borderColor = $(this).css("border-color");
+
+                                // render the event on the calendar
+                                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+                                // is the "remove after drop" checkbox checked?
+                                if ($('#drop-remove').is(':checked')) {
+                                    // if so, remove the element from the "Draggable Events" list
+                                    $(this).remove();
+                                }
+
+                            }
+                        });
+                        console.log(result);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('Failed to retrieve data.');
+                    }
+                });
+
+
+                //function ini_events(ele) {
+                //    ele.each(function () {
+
+                //        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                //        // it doesn't need to have a start or end
+                //        var eventObject = {
+                //            title: $.trim($(this).text()) // use the element's text as the event title
+                //        };
+
+                //        // store the Event Object in the DOM element so we can get to it later
+                //        $(this).data('eventObject', eventObject);
+
+                //        // make the event draggable using jQuery UI
+                //        $(this).draggable({
+                //            zIndex: 1070,
+                //            revert: true, // will cause the event to go back to its
+                //            revertDuration: 0  //  original position after the drag
+                //        });
+
+                //    });
+                //}
+
+                // ////////////
+                //var dte = "18/09/2016";
+                
+                
+                
+
+            });
+
+            $(function () {
+
+                //var all_Event = $('div span[class="fc-title"]');
+                $('div span[class="fc-title"]').each(function (index) {
+                    this.css('background-color', 'red');
+                    //console.log(this);
+                });                
+            });
+            
+        });
+    </script>
+    
+    }

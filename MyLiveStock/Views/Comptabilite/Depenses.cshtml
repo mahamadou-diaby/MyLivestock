@@ -1,0 +1,322 @@
+﻿@model List<Entity.Transactions.Transaction>
+
+
+@{
+    ViewBag.Title = "Depenses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    
+    <link rel="stylesheet" href="~/Scripts/Plugin/DataTables/media/css/dataTables.bootstrap.min.css" />    
+    <link rel="stylesheet" href="~/Scripts/Plugin/datepicker/datepicker3.css" />
+
+    }
+
+
+ <div class="content-wrapper">
+     <section class="content-header">
+         <h1>
+             Page Header
+             <small>Liste des dépenses</small>
+         </h1> 
+         <ol class="breadcrumb">
+             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+             <li class="active">Liste des lapins</li>
+         </ol>
+     </section>
+     <br />
+     @using (Ajax.BeginForm("ExpenseFilter", "Comptabilite", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "expenseId", InsertionMode = InsertionMode.Replace }, new { @class = "form-horizontal"}))
+     {
+        <div class="panel panel-default">
+            <div class="panel-heading label-primary">
+                <h3 class="panel-title">
+                    <a href="#js-expense-modal" title="Ajouter une dépense" data-toggle="modal" id="js-addExpense-modal" class="pull-right"><i class="icon fa fa-plus-square" style="margin-bottom:5px;"></i></a>
+                    Liste des dépenses
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="row col-lg-12">
+                    <div class="form-group">
+                        @Html.Label("Categorie", new { @class = "col-md-1 control-label" })
+                        <div class="col-lg-2">
+                            <select name="categorie" class="form-control">
+                                <option value="0">Tout</option>
+                                <option value="1">Nourriture</option>
+                                <option value="2">Santé</option>
+                                <option value="3">Construction</option>
+                                <option value="4">Autres...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                @Html.Label("Date", new { @class = "col-md-offset-2 col-md-1 control-label" })
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        @Html.TextBox("startDate", null, new { @class = "form-control", placeholder = "Debut", id = "start" })
+                                        <div class="input-group-addon startCalendar-icon-click">
+                                            <span class="glyphicon glyphicon-calendar "></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                @Html.Label("Date", new { @class = "col-md-1 control-label" })
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        @Html.TextBox("endDate", null, new { @class = "form-control", placeholder = "Fin", id = "end" })
+                                        <div class="input-group-addon endCalendar-icon-click">
+                                            <span class="glyphicon glyphicon-calendar "></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 ">
+                                    <button type="submit" class="form-control pull-right" id="filter"><i class="glyphicon glyphicon-refresh"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                    
+                </div>
+                <br />
+                <br />
+                <div id="expenseId">
+                    @Html.Partial("_ExpenseFilterView", Model)
+                </div>
+                
+            </div>
+        </div>
+     }
+ </div>
+
+
+<div id="example-modal">
+    <div id="js-expense-modal" class="modal fade">
+        <div class="modal-dialog">
+            @using (Html.BeginForm("CreateExpense", "Comptabilite", FormMethod.Post, new { id = "CreateSaillieForm", enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Ajouter une dépense</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    @Html.Label("Categorie")
+                                    <select name="categorie" class="form-control">
+                                        <option value="1">Nourriture</option>
+                                        <option value="2">Santé</option>
+                                        <option value="3">Construction</option>
+                                        <option value="4">Autres...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Date")
+                                    <div class="input-group">
+                                        @Html.TextBox("date", null, new { @class = "form-control", id = "date" })
+                                        <div class="input-group-addon dateCalendar-icon-click">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Montant")
+                                    <div class="input-group">
+                                        @Html.TextBox("amount", null, new { @class = "form-control", id = "montant" })
+                                        <div class="input-group-addon">
+                                            <span class="icon"><b>FCFA</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Description")
+                                    @Html.TextArea("description", new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                        <button type="submit" class="submit btn btn-primary">Confirmer</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            }
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.example-modal -->
+
+
+
+@section scripts{
+    
+    <script src="~/Scripts/Plugin/DataTables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/Plugin/DataTables/media/js/dataTables.bootstrap.min.js"></script>   
+    <script src="~/Scripts/Plugin/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/Plugin/datepicker/locales/bootstrap-datepicker.fr.js"></script>
+    @*<script src="~/Scripts/jquery-1.4.4.min.js"></script>*@
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            /*===============================
+              Mise en forme des du tableau 
+             ================================*/
+            $(function () {
+
+                $('#js-expense-table').dataTable({
+                    paging: true,
+                    sorting: true,
+                    searching: true,
+                    info: true,                    
+                });
+            });
+
+            /*===============================
+              Mise en forme des calendriers 
+             ================================*/
+            $(function () {
+
+                $('#date').datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true,
+                    orientation: "top right"
+                })
+
+                $('#start').datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true,
+                    orientation: "top right"
+                })
+
+                $(".startCalendar-icon-click").on('click', function (event) {
+                    event.preventDefault();
+                    $('#start').focus();
+                });
+
+                $(".dateCalendar-icon-click").on('click', function (event) {
+                    event.preventDefault();
+                    $('#date').focus();
+                });
+
+                $(".endCalendar-icon-click").on('click', function (event) {
+                    event.preventDefault();
+                    $('#end').focus();
+                });
+
+                $('#start').on('change', function (event) {
+                    event.preventDefault();
+                    $('#end').focus()
+                });
+
+                $('#end').on('change', function (event) {
+                    event.preventDefault();
+                    $('#filter').click();
+                });                
+
+                $('#end').datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true,
+                    orientation: "top right"
+                })
+            });
+
+            /*===========================================================================================
+              Boucle parcourant chaque ligne du tableau afin de mettre la colonne MONTANT au bon format 
+             ===========================================================================================*/
+            $(function () {
+
+                var table = $('#js-expense-table').DataTable();                
+                table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    var data = this.data();
+                    var amount = parseInt(data[3], 10);
+                    data[3] = amount.toLocaleString() + ' FCFA' 
+                    this.data(data)
+                });
+
+            });
+
+            $(function ($, undefined) {
+                "use strict";
+
+                $(function () {
+                    var
+                         text = $('#total').text();
+                    var amount = parseInt(text, 10);
+                    $('#total').text(' ' + amount.toLocaleString() + ' FCFA');
+                });
+
+            });
+
+            
+
+            /*===========================================================================================
+              Fonction permettant de mettre automatiquement en forme le input du montant lors de la saisie
+             ===========================================================================================*/
+            (function ($, undefined) {
+
+                "use strict";
+
+                // When ready.
+                $(function () {
+
+                    var $form = $("#expenseForm");
+                    var $input = $("#montant");
+
+                    $input.on("keyup", function (event) {
+
+
+                        // When user select text in the document, also abort.
+                        var selection = window.getSelection().toString();
+                        if (selection !== '') {
+                            return;
+                        }
+
+                        // Quand on appuie sur les touches flèches.
+                        if ($.inArray(event.keyCode, [38, 40, 37, 39]) !== -1) {
+                            return;
+                        }
+
+
+                        var $this = $(this);
+
+                        // recupère la valeur.
+                        var input = $this.val();
+
+                        var input = input.replace(/[\D\s\._\-]+/g, "");
+                        input = input ? parseInt(input, 10) : 0;
+
+                        $this.val(function () {
+                            return (input === 0) ? "" : input.toLocaleString();
+                        });
+                    });
+
+                    /**
+                     * ==================================
+                     *  Quand on soumet le formulaire.
+                     * ==================================
+                     */
+                    $form.on("submit", function (event) {
+
+                        var $this = $(this);
+                        var arr = $this.serializeArray();
+
+                        for (var i = 0; i < arr.length; i++) {
+                            arr[i].value = arr[i].value.replace(/[($)\s\._\-]+/g, ''); 
+                        };
+
+                        console.log(arr);
+
+                        event.preventDefault();
+                    });
+
+                });
+            })(jQuery);            
+        });
+    </script>
+
+    }
